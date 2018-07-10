@@ -4,7 +4,7 @@ $color-gray-one: #444;
 $color-gray-two: #e6e6e6;
 $color-yellow-one:#f7d754;
 
-$font-roboto: "Robot Condensed";
+$font-roboto: "Roboto Condensed";
 $font-mont: "Montserrat";
 
 .grid {
@@ -13,7 +13,7 @@ $font-mont: "Montserrat";
 
     display: grid;
     grid-template-rows: repeat(4, minmax(200px, 1fr));
-    grid-template-columns: repeat(11, minmax(150px, 1fr));
+    grid-template-columns: repeat(10, minmax(150px, 1fr));
     
 
     &__title {
