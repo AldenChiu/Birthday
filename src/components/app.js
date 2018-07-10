@@ -74,7 +74,7 @@ export default class App extends Component {
     this.timer = setInterval(function() {
 
     // Get todays date and time
-    var now = new today.getTime();
+    var now = new moment().toDate().getTime();
     
     // Find the distance between now and the count down date
     var distance = countDownDate - now;
@@ -100,23 +100,36 @@ export default class App extends Component {
       clearInterval(this.timer);
       //document.getElementById("demo").innerHTML = "EXPIRED";
     }
-}.bind(this), 1000);
-  }.bind(this)
-  
+  }.bind(this), 1000);
+}.bind(this)
+
+getBirthDate = function(date) {
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  if(month < 10) {
+    return `0${month}/${day}`;
+  }
+  else {
+    return `${month}/${day}`;
+  }
+}.bind (this);
+
   renderItems = function() {
     if(this.state.active) {
       return [
-        <Clock timeRemaining={this.state.timeRemaining}/>,
+        <Clock key={0} timeRemaining={this.state.timeRemaining}/>,
         ChangeDate('Change Date', () => this.setState({active: false})),
-        LargeText('7/10'),
-        <label className="grid__remaining">
+        LargeText(this.getBirthDate(this.state.startDate.toDate())),
+        <label key={3} className="grid__remaining">
           Remaining until you turn {this.state.age}!
         </label>
       ]
     } else {
       return [
-        <Picker startDate={this.state.startDate} callback={(date) => this.handleChange(date)}/>,
-        Button('Generate Countdown', () => this.setState({ active: true }))
+        <Picker startDate={this.state.startDate}
+        callback={(date) => this.handleChange(date)}
+        key={0}/>,
+        Button('Generate Countdown', () => this.handleGenerate())
       ]     
     }
   }.bind(this)
