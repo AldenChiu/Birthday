@@ -22,29 +22,59 @@ export default class App extends Component {
         hours: 0,
         minutes: 0,
         seconds: 0
-      }
-    }
+      },
+      age: 0
+    };
 
     this.handleGenerate = this.handleGenerate.bind(this)
   }
 
   handleChange = function(date) {
     console.log('APP JS HANDLE CHANGE', date._d);
+    clearInterval(this.timer);
     this.setState({
-    startDate: date
+      startDate: date
     });
-  }.bind(this)
+  }.bind(this);
 
   handleGenerate = function() {
-    this.setState({ active: true })
+
+    var bday = this.state.startDate.toDate();
+    var today = new Date();
+    var currentMonth = today.getMonth()
+    var birthMonth = bday.getMonth()
+    var currentDay = today.getDate()
+    var birthDay = bday.getDate()
+
+    var timeBetween = today.getTime() - bday.getTime();
+    var daysOld = Math.floor(timeBetween / (1000 * 60 * 60 * 24));
+    var age = Number((daysOld/365).toFixed(0));
+    this.setState({
+      age,
+      active: true
+    })
+
+    if(birthMonth > currentMonth) {
+      bday.setFullYear(today.getFullYear())
+    } else if(birthMonth < currentMonth) {
+      bday.setFullYear(today.getFullYear() + 1)
+    } else if(birthMonth == curentMonth) {
+        if(birthDay > currentDay) {
+          bday.setFullYear(today.getFullYear())
+        } else if(birthDay < currentDay) {
+          bday.setFullYear(today.getFullYear() + 1)
+        }
+    }
+
+
       // Set the date we're counting down to
-    var countDownDate = this.state.startDate.toDate().getTime();
+    var countDownDate = bday.getTime();
 
     // Update the count every 1 second
     this.timer = setInterval(function() {
 
     // Get todays date and time
-    var now = new Date().getTime();
+    var now = new today.getTime();
     
     // Find the distance between now and the count down date
     var distance = countDownDate - now;
@@ -79,7 +109,9 @@ export default class App extends Component {
         <Clock timeRemaining={this.state.timeRemaining}/>,
         ChangeDate('Change Date', () => this.setState({active: false})),
         LargeText('7/10'),
-        <label className="grid__remaining">You have 80 days left until your 16th birthday!</label>
+        <label className="grid__remaining">
+          Remaining until you turn {this.state.age}!
+        </label>
       ]
     } else {
       return [
