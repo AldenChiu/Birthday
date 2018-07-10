@@ -3,6 +3,7 @@
     grid-row: 2/3;
     // background: cornflowerblue;
     justify-self: center;
+    align-self: end;
     padding-bottom: 50px;
 
 
@@ -13,7 +14,7 @@
         color: $color-gray-one;
         text-align: center;
         border: none;
-        background-color: clear;
+        background-color: transparent;
         border-bottom: 2px solid #e3b924;
         &:focus {
             outline: none;

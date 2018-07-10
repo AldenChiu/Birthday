@@ -1,7 +1,36 @@
 import React, { Component } from 'react';
 import Picker from './picker';
+import Button from './button';
+import Clock from './clock';
+import ChangeDate from './changeDate';
+import LargeText from './largeText';
 
 export default class App extends Component {
+  
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      active: false
+    }
+  }
+  
+  renderItems = function() {
+    if(this.state.active) {
+      return [
+        <Clock/>,
+        ChangeDate('Change Date', () => this.setState({active: false})),
+        LargeText('i')
+        <label className="grid__remaining">00000</label>
+      ]
+    } else {
+      return [
+        <Picker/>,
+        Button('Generate Countdown', () => this.setState({ active: true }))
+      ]     
+    }
+  }.bind(this)
+
   render() {
     return (
       <div className="grid">
@@ -14,8 +43,8 @@ export default class App extends Component {
         <div className="grid__skew-light-two"> </div>
         <div className="grid__skew-light-three-box"> </div>
 
-        <Picker/>
-        { Button('Generate Countdown') }
+        { this.renderItems() }
+
       </div>
     );
   }
