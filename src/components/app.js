@@ -48,7 +48,12 @@ export default class App extends Component {
 
     var timeBetween = today.getTime() - bday.getTime();
     var daysOld = Math.floor(timeBetween / (1000 * 60 * 60 * 24));
-    var age = Number((daysOld/365).toFixed(0));
+    if(birthMonth >= currentMonth) {
+      var age = Number((daysOld/365).toFixed(0));
+    } else if(birthMonth < currentMonth) {
+      var age = Number(((daysOld/365) + 1).toFixed(0));
+    }
+
     this.setState({
       age,
       active: true
