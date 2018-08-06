@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import Picker from './picker';
 import Button from './button';
 import Clock from './clock';
@@ -11,6 +12,8 @@ export default class App extends Component {
   
   constructor(props) {
     super(props)
+
+    this.timer = 0;
 
     this.state = {
       active: false,
@@ -36,34 +39,32 @@ export default class App extends Component {
 
   handleGenerate = function() {
 
+    clearInterval(this.timer)
+
     var bday = this.state.startDate.toDate();
     var today = new Date();
     var currentMonth = today.getMonth()
     var birthMonth = bday.getMonth()
-    var currentDay = today.getDate()
-    var birthDay = bday.getDate()
 
     var timeBetween = today.getTime() - bday.getTime();
     var daysOld = Math.floor(timeBetween / (1000 * 60 * 60 * 24));
-    if(birthMonth >= currentMonth) {
-      var age = Number((daysOld/365).toFixed(0));
-    } else if(birthMonth < currentMonth) {
-      var age = Number(((daysOld/365) + 1).toFixed(0));
-    }
-
+    var age = Number((daysOld/365).toFixed(0));
     this.setState({
       age,
       active: true
-    })
+    });
 
     if(birthMonth > currentMonth) {
       bday.setFullYear(today.getFullYear())
     } else if(birthMonth < currentMonth) {
       bday.setFullYear(today.getFullYear() + 1)
-    } else if(birthMonth == curentMonth) {
+    } else if(birthMonth == currentMonth) {
+        var currentDay = today.getDate();
+        var birthDay = bday.getDate();
+
         if(birthDay > currentDay) {
           bday.setFullYear(today.getFullYear())
-        } else if(birthDay < currentDay) {
+        } else if(birthDay <= currentDay) {
           bday.setFullYear(today.getFullYear() + 1)
         }
     }
@@ -76,26 +77,27 @@ export default class App extends Component {
     this.timer = setInterval(function() {
 
     // Get todays date and time
-    var now = moment().toDate().getTime();
+      var now = moment().toDate().getTime();
     
     // Find the distance between now and the count down date
-    var distance = countDownDate - now;
+      var distance = countDownDate - now;
 
     // Time calculations for days, hours, minutes and seconds
-    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
     // Output the results in a n element with id="demo"
-    const time = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+      const time = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
       const timeRemaining = {
           days,
           hours,
           minutes,
           seconds
-        }
-        this.setState({ timeRemaining })
+        };
+
+        this.setState({ timeRemaining });
 
     // If the count down is over, write some text
     if (distance < 0) {
@@ -103,7 +105,7 @@ export default class App extends Component {
       //document.getElementById("demo").innerHTML = "EXPIRED";
     }
   }.bind(this), 1000);
-}.bind(this)
+}.bind(this);
 
 getBirthDate = function(date) {
   const month = date.getMonth() + 1;
@@ -114,7 +116,7 @@ getBirthDate = function(date) {
   else {
     return `${month}/${day}`;
   }
-}.bind (this);
+}.bind(this);
 
   renderItems = function() {
     if(this.state.active) {
@@ -123,18 +125,20 @@ getBirthDate = function(date) {
         ChangeDate('Change Date', () => this.setState({active: false})),
         LargeText(this.getBirthDate(this.state.startDate.toDate())),
         <label key={3} className="grid__remaining">
-          Remaining until you turn {this.state.age}!
+          Remaining until you turn {this.state.age}
         </label>
-      ]
+      ];
     } else {
       return [
-        <Picker startDate={this.state.startDate}
-        callback={(date) => this.handleChange(date)}
-        key={0}/>,
+        <Picker 
+          startDate={this.state.startDate}
+          callback={date => this.handleChange(date)}
+          key={0}
+        />,
         Button('Generate Countdown', () => this.handleGenerate())
-      ]     
+      ];     
     }
-  }.bind(this)
+  }.bind(this);
 
   render() {
     return (
@@ -147,7 +151,7 @@ getBirthDate = function(date) {
         <div className="grid__skew-light-two"> </div>
         <div className="grid__skew-light-three-box"> </div>
 
-        { this.renderItems() }
+        {this.renderItems()}
 
       </div>
     );
