@@ -110,8 +110,14 @@ export default class App extends Component {
 getBirthDate = function(date) {
   const month = date.getMonth() + 1;
   const day = date.getDate();
-  if(month < 10) {
+  if(month < 10 && day < 10) {
+      return `0${month}/0${day}`;
+  }
+  else if(month < 10 && day >= 10) {
     return `0${month}/${day}`;
+  }
+  else if(month >= 10 && day < 10) {
+    return `${month}/0${day}`;
   }
   else {
     return `${month}/${day}`;
