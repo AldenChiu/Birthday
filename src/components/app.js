@@ -12,8 +12,6 @@ export default class App extends Component {
   constructor(props) {
     super(props)
 
-    this.timer = 0;
-
     this.state = {
       active: false,
       startDate: moment(),
@@ -31,7 +29,6 @@ export default class App extends Component {
 
   handleChange = function(date) {
     console.log('APP JS HANDLE CHANGE', date._d);
-    clearInterval(this.timer);
     this.setState({
       startDate: date
     });
@@ -79,7 +76,7 @@ export default class App extends Component {
     this.timer = setInterval(function() {
 
     // Get todays date and time
-    var now = new moment().toDate().getTime();
+    var now = moment().toDate().getTime();
     
     // Find the distance between now and the count down date
     var distance = countDownDate - now;
